@@ -9,7 +9,7 @@ describe("Cadastro de usuário",() => {
 
       let time = Date.now();
       let email = `${time}@gmail.com`  
-      let user = {name:"Felipe",email,password:"123456"}
+      let user = {name:"Felipe",email,password:"1234567"}
   
       return request.post("/user")
       .send(user)

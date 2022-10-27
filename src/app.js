@@ -2,7 +2,7 @@ let express = require("express");
 let app = express();
 let mongoose = require("mongoose");
 let user = require("./models/User");
-
+let bcrypt = require("bcryptjs");
 
 app.use(express.urlencoded({extended:false}))
 app.use(express.json());
@@ -35,9 +35,13 @@ app.post("/user",async (req,res) => {
           res.json({error:"E-mail já cadastrado"})
           return;
         }
-        let newUser  = new User({name:req.body.name,
-             email:req.body.email,password:req.body.password});
+
+        let oldPassword = req.body.password;
+        let passwordHash = await bcrypt.hash(oldPassword,8);
+
+        let newUser  = new User({name:req.body.name,email:req.body.email,password:passwordHash});
         await newUser.save();
+        res.status(200);
         res.json({email:req.body.email})
     } catch(e) {
       res.sendStatus(500);
