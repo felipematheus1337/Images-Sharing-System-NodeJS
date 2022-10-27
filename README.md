@@ -1,6 +1,7 @@
 <h2>Sistema de Compartilhamento de Imagens!</h2>
 
 <hr>
+<h4>Tecnologias Utilizadas:</h4>
 <ul>
 <li>TDD</li>
 <li>NodeJS</li>
