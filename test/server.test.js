@@ -7,4 +7,4 @@ test("A aplicação deve responder na porta 3002",() => {
     expect(res.statusCode).toEqual(200)}).catch(e => {
         fail(e);
     })
- })
+ });
