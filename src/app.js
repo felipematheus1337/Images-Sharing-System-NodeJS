@@ -21,7 +21,20 @@ app.get("/",(req,res) => {
 })
 
 app.post("/user",async (req,res) => {
+     
+     if(req.body.name == "" || req.body.email == "" || req.body.password == "") {
+      res.sendStatus(400);
+      return;
+     }
+
     try {
+        let user = await User.findOne({"email":req.body.email});
+
+        if(user != undefined) {
+          res.status(400);
+          res.json({error:"E-mail já cadastrado"})
+          return;
+        }
         let newUser  = new User({name:req.body.name,
              email:req.body.email,password:req.body.password});
         await newUser.save();
