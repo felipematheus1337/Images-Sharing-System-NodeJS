@@ -59,8 +59,23 @@ app.delete("/deleteMock/:email",async (req,res) => {
 
 app.post("/auth",async (req,res) => {
   let {email,password} = req.body;
+
+ let user = await User.findOne({email:email});
+
+ if(user == undefined) {
+  res.status(403);
+  res.json({errors: {email:"E-mail não cadastrado"}})
+  return;
+ }
+
+    if(!(await bcrypt.compare(password,user.password))) {
+       res.status(403)
+       res.json({errors:{password:"Senha incorreta"}})
+       return;
+    }
+
   try {
-      jwt.sign({email},JWTSecret,{expiresIn:'48h'},(err,token) => {
+      jwt.sign({email,name:user.name,id:user._id},JWTSecret,{expiresIn:'48h'},(err,token) => {
         if(err) {
           res.sendStatus(500)
           console.log(err);

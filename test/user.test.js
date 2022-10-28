@@ -85,14 +85,39 @@ describe("Cadastro de usuário",() => {
 describe("Autenticação",() => {
 
   test("deve me retornar um token quando logar",() => {
-   request.post("/auth")
+   return request.post("/auth")
    .send({email:mainUser.email,password:mainUser.password})
    .then(res =>{
-    console.log("RES BODY",res.body)
     expect(res.statusCode).toEqual(200)
     expect(res.body.token).toBeDefined()
    })
    .catch(e => {})
-
   })
+
+
+
+
+  test("Deve impedir que um usuário não cadastrado se logue",() => {
+return request.post("/auth")
+   .send({email:"UM EMAIL QUALQUER",password:"senha invalida"})
+   .then(res =>{
+    expect(res.statusCode).toEqual(403)
+    expect(res.body.errors.email).toEqual("E-mail não cadastrado");
+   })
+   .catch(e => {})
+  })
+
+
+  test("Deve impedir que um usuário se logue com uma senha errada",() => {
+    return request.post("/auth")
+       .send({email:mainUser.email,password:"senha errada!"})
+       .then(res =>{
+        expect(res.statusCode).toEqual(403)
+        expect(res.body.errors.password).toEqual("Senha incorreta");
+       })
+       .catch(e => {})
+      })
+
 })
+
+
