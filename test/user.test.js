@@ -1,6 +1,7 @@
 let app = require("../src/app")
 let supertest = require("supertest")
 let request = supertest(app);
+let jwt = require("jsonwebtoken");
 
 let mainUser = {name: "Felipe Matheus",email:"lipehzika@hotmail.com",password:"123456"};
 
@@ -79,4 +80,19 @@ describe("Cadastro de usuário",() => {
       })
     })
 
+})
+
+describe("Autenticação",() => {
+
+  test("deve me retornar um token quando logar",() => {
+   request.post("/auth")
+   .send({email:mainUser.email,password:mainUser.password})
+   .then(res =>{
+    console.log("RES BODY",res.body)
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.token).toBeDefined()
+   })
+   .catch(e => {})
+
+  })
 })

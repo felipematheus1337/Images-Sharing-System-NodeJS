@@ -3,6 +3,7 @@ let app = express();
 let mongoose = require("mongoose");
 let user = require("./models/User");
 let bcrypt = require("bcryptjs");
+let jwt = require("jsonwebtoken");
 
 app.use(express.urlencoded({extended:false}))
 app.use(express.json());
@@ -19,6 +20,8 @@ let User = mongoose.model("User",user);
 app.get("/",(req,res) => {
     res.json({});
 })
+
+var JWTSecret = "TESTEMOCKAPIIMAGENS"
 
 app.post("/user",async (req,res) => {
      
@@ -50,10 +53,29 @@ app.post("/user",async (req,res) => {
 })  
 
 app.delete("/deleteMock/:email",async (req,res) => {
-  await User.remove({"email":req.params.email})
+  await User.deleteOne({"email":req.params.email})
   res.sendStatus(200);
+})
 
-  
+app.post("/auth",async (req,res) => {
+  let {email,password} = req.body;
+  try {
+      jwt.sign({email},JWTSecret,{expiresIn:'48h'},(err,token) => {
+        if(err) {
+          res.sendStatus(500)
+          console.log(err);
+        } else {
+          res.json({token})
+        }
+
+      })
+    
+    return res.status(400);
+  } catch(e) {
+
+  }
+ 
+
 })
 
 
