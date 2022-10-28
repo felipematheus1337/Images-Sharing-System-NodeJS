@@ -2,6 +2,23 @@ let app = require("../src/app")
 let supertest = require("supertest")
 let request = supertest(app);
 
+let mainUser = {name: "Felipe Matheus",email:"lipehzika@hotmail.com",password:"123456"};
+
+beforeAll(() => {
+return request.post("/user")
+.send(mainUser)
+.then(res => {})
+.catch(e => console.log(e))
+
+})
+
+afterAll(() => {
+   return request.delete(`/deleteMock/${mainUser.email}`)
+   .then(res =>{})
+   .catch(e => {console.log(e)})
+})
+
+
 
 describe("Cadastro de usuário",() => {
 

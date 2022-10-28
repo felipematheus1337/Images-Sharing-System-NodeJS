@@ -47,6 +47,13 @@ app.post("/user",async (req,res) => {
       res.sendStatus(500);
     }
     
+})  
+
+app.delete("/deleteMock/:email",async (req,res) => {
+  await User.remove({"email":req.params.email})
+  res.sendStatus(200);
+
+  
 })
 
 
